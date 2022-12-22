@@ -114,9 +114,7 @@ def show_start_search(reply_token, text):
     for i in range(links_length):
         img_urls.append('https://decotv.com.tw/' + links[i]['src'])
         popup_url_link.append(popup_url + links2[i].get("data-id") + popup_url_mid + links2[i].get("data-pic"))
-
-    # for j in range(links_length):
-    #     print(img_urls[j], popup_url_link[j])         
+      
     imagecarouselcolumns = []
     for i in range(links_length):
         imagecarouselcolumns.append(
@@ -182,6 +180,12 @@ def show_maintenance_method(reply_token):
     line_bot_api.reply_message(reply_token,ImageSendMessage(
         original_content_url='https://i.imgur.com/ITshKAM.png', 
         preview_image_url='https://i.imgur.com/ITshKAM.png'))
+    
+def show_FSM(reply_token):
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token,ImageSendMessage(
+        original_content_url="https://i.imgur.com/AlUAb6h.png",
+        preview_image_url="https://i.imgur.com/AlUAb6h.png"))
     
 def show_contact_us(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
