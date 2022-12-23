@@ -4,7 +4,6 @@ from flask import Flask, jsonify, request, abort, send_file
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-
 from fsm import TocMachine
 from utils import send_text_message
 
@@ -12,14 +11,11 @@ os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
 
 machine = TocMachine(
     states=["main_menu", "contents_and_images", "contents", "office_tables", "office_chairs_and_sofas",
-            "contact_us", "contact_number", "address", "search_style_or_category", "search", "start_search", 
-            "maintenance_method", "category", "FSM"],
+            "contact_us", "contact_number", "address", "search_style_or_category", "search", "start_search", "category"],
     transitions=[
         {"trigger": "advance", "source": "main_menu", "dest": "search_style_or_category", "conditions": "is_going_to_search_style_or_category",},
         {"trigger": "advance", "source": "main_menu", "dest": "contents_and_images", "conditions": "is_going_to_contents_and_images",},
-        {"trigger": "advance", "source": "main_menu", "dest": "maintenance_method", "conditions": "is_going_to_maintenance_method",},
         {"trigger": "advance", "source": "main_menu", "dest": "contact_us", "conditions": "is_going_to_contact_us",},
-        {"trigger": "advance", "source": "main_menu", "dest": "FSM", "conditions": "is_going_to_FSM"},
         {"trigger": "advance", "source": "search_style_or_category", "dest": "search", "conditions": "is_going_to_search",},
         {"trigger": "advance", "source": "search_style_or_category", "dest": "category", "conditions": "is_going_to_category",},
         {"trigger": "advance", "source": "main_menu", "dest": "address", "conditions": "is_going_to_address",},
@@ -31,9 +27,10 @@ machine = TocMachine(
         {"trigger": "advance", "source": ["main_menu","contents_and_images"], "dest": "contents", "conditions": "is_going_to_contents",},
         {"trigger": "advance", "source": "search", "dest": "start_search"},
         {"trigger": "advance", "source": "start_search", "dest": "search", "conditions": "is_going_to_backto_search"},
+        {"trigger": "advance", "source": "main_menu", "dest": "main_menu", "conditions": "is_staying_at_main_menu"},
         {
             "trigger": "advance", 
-            "source": ["FSM", "maintenance_method", "category", "start_search", "search", "contents_and_images", "contents", "office_tables", "office_chairs_and_sofas", "contact_us", "contact_number", "address"], 
+            "source": ["category", "start_search", "search", "contents_and_images", "contents", "office_tables", "office_chairs_and_sofas", "contact_us", "contact_number", "address"], 
             "dest": "main_menu",
             "conditions": "is_going_to_main_menu"
         },

@@ -7,16 +7,6 @@ class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
         
-    def is_going_to_FSM(self, event):
-        text = event.message.text
-        return text == "show FSM"
-    
-    def on_enter_FSM(self, event):
-        print("I'm entering FSM")
-        reply_token = event.reply_token
-        show_FSM(reply_token)
-        self.advance(event)
-        
     def is_going_to_search(self, event):
         text = event.message.text
         return text.lower() == "search"
@@ -60,15 +50,12 @@ class TocMachine(GraphMachine):
     def on_enter_main_menu(self, event):
         print("I'm entering menu")
 
-    def is_going_to_maintenance_method(self, event):
-        text = event.message.text
-        return text.lower() == "maintenance method"
-    
-    def on_enter_maintenance_method(self, event):
-        print("I'm entering maintenance_method")
-        reply_token = event.reply_token
-        show_maintenance_method(reply_token)
-        self.advance(event)
+    def is_staying_at_main_menu(self, event):
+        if(event.message.text == "show FSM"):
+            show_FSM(event.reply_token)
+        elif(event.message.text == "maintenance method"):
+            show_maintenance_method(event.reply_token)
+        return True
 
     def is_going_to_contact_us(self, event):
         text = event.message.text
