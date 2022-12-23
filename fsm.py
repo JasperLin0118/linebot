@@ -60,31 +60,20 @@ class TocMachine(GraphMachine):
     def is_going_to_contact_us(self, event):
         text = event.message.text
         return text.lower() == "contact us"
+    
+    def is_staying_at_contact_us(self, event):
+        reply_token = event.reply_token
+        text = event.message.text
+        if(text == "address"):
+            show_address(reply_token)
+        elif(text == "contact number"):
+            show_contact_number(reply_token)
+        return True
 
     def on_enter_contact_us(self, event):
         print("I'm entering contact_us")
         reply_token = event.reply_token
         show_contact_us(reply_token)
-        
-    def is_going_to_address(self, event):
-        text = event.message.text
-        return text.lower() == "address"
-    
-    def on_enter_address(self, event):
-        print("I'm entering address")
-        reply_token = event.reply_token
-        show_address(reply_token)
-        self.advance(event)
-    
-    def is_going_to_contact_number(self, event):
-        text = event.message.text
-        return text.lower() == "contact number"
-    
-    def on_enter_contact_number(self, event):
-        print("I'm entering contact_number")
-        reply_token = event.reply_token
-        show_contact_number(reply_token)
-        self.advance(event)
 
     def is_going_to_contents_and_images(self, event):
         text = event.message.text
