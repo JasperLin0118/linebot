@@ -1,159 +1,45 @@
-# TOC Project 2020
+# 創立主旨
+客人常常因為辦公室內需要選配許多辦公桌椅、各種辦公家具，但不知道自己偏好的顏色、樣式等等，而需要打電話詢問我們，為了讓客人可以隨時隨地且更有效率的參考公司的各種辦公桌椅目錄和圖片，或是使用線上的辦公室風格查詢，選定之後使用我們提供的線上詢價單來詢問，才創立這個機器人。
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/dc7fa47fcd809b99d087/maintainability)](https://codeclimate.com/github/NCKU-CCS/TOC-Project-2020/maintainability)
+# 基本資訊
+### 名稱: JoyMart 藝崴國際
+![linebot_icon](./imgs/linebot_icon.jpg)
+### 以下是機器人的line ID，也可以透過掃描QR code加入好友:
+![linebot_ID](./imgs/linebot_ID.png)
+### 功能選單:
+![menu](https://i.imgur.com/bsR9HPw.png)
 
-[![Known Vulnerabilities](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020/badge.svg)](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020)
+#### 線上目錄: 我們提供的各種辦公家具目錄及圖片
+![contents_and_images](./imgs/contents_and_images.png)
+#### 有3種，分為目錄、辦公桌、辦公椅及沙發
+![contents](./imgs/contents.png)
+![office_tables](./imgs/office_tables.png)
+![office_chairs_and_sofas](./imgs/office_chairs_and_sofas.png)
+#### 聯絡我們: 各種聯絡資訊
+![contact_us](./imgs/contact_us.png)
+#### 商品詢價: 連接至提供的詢價單
+![request_quote](./imgs/request_quote.png)
+#### 辦公室風格參考: 線上參考辦公室的風格
+![search_style_and_category](./imgs/search_style_and_category.png)
+#### 可查詢風格，有10種可供選擇，可輸入編號或風格名稱，輸入錯誤可以重新輸入:
+![search](./imgs/search.png)
+#### 以下是其中一個風格的查詢結果
+![search_result](./imgs/search_result.png)
+#### 查詢類別:
+![category](./imgs/category.png)
+#### 家具保養Q&A: 各種辦公家具的操作及保養方式和問題
+![office_chairs_and_sofas](https://i.imgur.com/ITshKAM.png)
+#### Show FSM: 這個機器人的有限狀態圖
 
+# Finite State Machine
+FSM使用**GraphMachine**產生，更多資訊請參考[transitions.extensions](https://github.com/pytransitions/transitions)，以下是這個機器人的FSM:
 
-Template Code for TOC Project 2020
+![fsm](./imgs/fsm.png)
 
-A Line bot based on a finite state machine
+# References
+部分資訊來自:
+#### [DECO TV室內設計平台](https://decotv.com.tw)
+#### [Office Snapshots](https://officesnapshots.com)
 
-More details in the [Slides](https://hackmd.io/@TTW/ToC-2019-Project#) and [FAQ](https://hackmd.io/s/B1Xw7E8kN)
-
-## Setup
-
-### Prerequisite
-* Python 3.6
-* Pipenv
-* Facebook Page and App
-* HTTPS Server
-
-#### Install Dependency
-```sh
-pip3 install pipenv
-
-pipenv --three
-
-pipenv install
-
-pipenv shell
-```
-
-* pygraphviz (For visualizing Finite State Machine)
-    * [Setup pygraphviz on Ubuntu](http://www.jianshu.com/p/a3da7ecc5303)
-	* [Note: macOS Install error](https://github.com/pygraphviz/pygraphviz/issues/100)
-
-
-#### Secret Data
-You should generate a `.env` file to set Environment Variables refer to our `.env.sample`.
-`LINE_CHANNEL_SECRET` and `LINE_CHANNEL_ACCESS_TOKEN` **MUST** be set to proper values.
-Otherwise, you might not be able to run your code.
-
-#### Run Locally
-You can either setup https server or using `ngrok` as a proxy.
-
-#### a. Ngrok installation
-* [ macOS, Windows, Linux](https://ngrok.com/download)
-
-or you can use Homebrew (MAC)
-```sh
-brew cask install ngrok
-```
-
-**`ngrok` would be used in the following instruction**
-
-```sh
-ngrok http 8000
-```
-
-After that, `ngrok` would generate a https URL.
-
-#### Run the sever
-
-```sh
-python3 app.py
-```
-
-#### b. Servo
-
-Or You can use [servo](http://serveo.net/) to expose local servers to the internet.
-
-
-## Finite State Machine
-![fsm](./img/show-fsm.png)
-
-## Usage
-The initial state is set to `user`.
-
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
-
-* user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
-
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
-
-## Deploy
-Setting to deploy webhooks on Heroku.
-
-### Heroku CLI installation
-
-* [macOS, Windows](https://devcenter.heroku.com/articles/heroku-cli)
-
-or you can use Homebrew (MAC)
-```sh
-brew tap heroku/brew && brew install heroku
-```
-
-or you can use Snap (Ubuntu 16+)
-```sh
-sudo snap install --classic heroku
-```
-
-### Connect to Heroku
-
-1. Register Heroku: https://signup.heroku.com
-
-2. Create Heroku project from website
-
-3. CLI Login
-
-	`heroku login`
-
-### Upload project to Heroku
-
-1. Add local project to Heroku project
-
-	heroku git:remote -a {HEROKU_APP_NAME}
-
-2. Upload project
-
-	```
-	git add .
-	git commit -m "Add code"
-	git push -f heroku master
-	```
-
-3. Set Environment - Line Messaging API Secret Keys
-
-	```
-	heroku config:set LINE_CHANNEL_SECRET=your_line_channel_secret
-	heroku config:set LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
-	```
-
-4. Your Project is now running on Heroku!
-
-	url: `{HEROKU_APP_NAME}.herokuapp.com/callback`
-
-	debug command: `heroku logs --tail --app {HEROKU_APP_NAME}`
-
-5. If fail with `pygraphviz` install errors
-
-	run commands below can solve the problems
-	```
-	heroku buildpacks:set heroku/python
-	heroku buildpacks:add --index 1 heroku-community/apt
-	```
-
-	refference: https://hackmd.io/@ccw/B1Xw7E8kN?type=view#Q2-如何在-Heroku-使用-pygraphviz
-
-## Reference
-[Pipenv](https://medium.com/@chihsuan/pipenv-更簡單-更快速的-python-套件管理工具-135a47e504f4) ❤️ [@chihsuan](https://github.com/chihsuan)
-
-[TOC-Project-2019](https://github.com/winonecheng/TOC-Project-2019) ❤️ [@winonecheng](https://github.com/winonecheng)
-
-Flask Architecture ❤️ [@Sirius207](https://github.com/Sirius207)
-
-[Line line-bot-sdk-python](https://github.com/line/line-bot-sdk-python/tree/master/examples/flask-echo)
+# TOC Final Project
+> 2022/12/23 完成
