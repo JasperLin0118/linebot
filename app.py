@@ -6,13 +6,19 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 from fsm import TocMachine
 from utils import send_text_message
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+
+cred = credentials.Certificate("toclinebot-80594-firebase-adminsdk-g85c3-2673698c57.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin/'
 
-machine = TocMachine(
-    states=["main_menu", "contents_and_images", "contact_us", "search_style_or_category", "search", "start_search", "category"],
-    transitions=[
-        {"trigger": "advance", "source": "main_menu", "dest": "search_style_or_category", "conditions": "is_going_to_search_style_or_category",},
+
+states = ["main_menu", "contents_and_images", "contact_us", "search_style_or_category", "search", "start_search", "category"]
+transitions = [{"trigger": "advance", "source": "main_menu", "dest": "search_style_or_category", "conditions": "is_going_to_search_style_or_category",},
         {"trigger": "advance", "source": "main_menu", "dest": "contents_and_images", "conditions": "is_going_to_contents_and_images",},
         {"trigger": "advance", "source": "main_menu", "dest": "contact_us", "conditions": "is_going_to_contact_us",},
         {"trigger": "advance", "source": "search_style_or_category", "dest": "search", "conditions": "is_going_to_search",},
@@ -30,12 +36,36 @@ machine = TocMachine(
             "source": ["start_search", "main_menu", "contents_and_images", "contact_us"], 
             "dest": "search",
             "conditions": "is_going_to_search"
-        },
-    ],
-    initial="main_menu",
-    auto_transitions=False,
-    show_conditions=True,
-)
+        }]
+
+
+# machine = TocMachine(
+#     states=["main_menu", "contents_and_images", "contact_us", "search_style_or_category", "search", "start_search", "category"],
+#     transitions=[
+#         {"trigger": "advance", "source": "main_menu", "dest": "search_style_or_category", "conditions": "is_going_to_search_style_or_category",},
+#         {"trigger": "advance", "source": "main_menu", "dest": "contents_and_images", "conditions": "is_going_to_contents_and_images",},
+#         {"trigger": "advance", "source": "main_menu", "dest": "contact_us", "conditions": "is_going_to_contact_us",},
+#         {"trigger": "advance", "source": "search_style_or_category", "dest": "search", "conditions": "is_going_to_search",},
+#         {"trigger": "advance", "source": "search_style_or_category", "dest": "category", "conditions": "is_going_to_category",},
+#         {"trigger": "advance", "source": "search", "dest": "start_search"},
+#         {"trigger": "advance", "source": "start_search", "dest": "search", "conditions": "is_going_to_backto_search"},
+#         {
+#             "trigger": "advance", 
+#             "source": ["main_menu", "category", "start_search", "search", "contents_and_images", "contact_us"], 
+#             "dest": "main_menu",
+#             "conditions": "is_going_to_main_menu"
+#         },
+#         {
+#             "trigger": "advance", 
+#             "source": ["start_search", "main_menu", "contents_and_images", "contact_us"], 
+#             "dest": "search",
+#             "conditions": "is_going_to_search"
+#         },
+#     ],
+#     initial="main_menu",
+#     auto_transitions=False,
+#     show_conditions=True,
+# )
 # machine.get_graph().draw("fsm.png", prog="dot", format="png")
 
 app = Flask(__name__, static_url_path="")
@@ -102,18 +132,29 @@ def webhook_handler():
             continue
         if not isinstance(event.message.text, str):
             continue
+        document_ref = db.collection("linebot_user_ids").document(event.source.user_id)
+        state = document_ref.get()
+        if(state.exists):
+            initial_state = state.to_dict()['state']
+        else:
+            d = {'user_id': event.source.user_id, 'state': 'main_menu'}
+            document_ref.set(d)
+            initial_state = "main_menu"
+        machine = TocMachine(states=states, transitions=transitions, initial=initial_state, auto_transitions=False, show_conditions=True)
         print(f"\nFSM STATE: {machine.state}")
         # print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
-        # if response == False:
-        #     send_text_message(event.reply_token, "Not Entering any State")
+        
+        if(state.to_dict()['state'] != machine.state):
+            document_ref.update({'state': machine.state})
+        
     return "OK"
 
 
-@app.route("/show-fsm", methods=["GET"])
-def show_fsm():
-    machine.get_graph().draw("fsm.png", prog="dot", format="png")
-    return send_file("fsm.png", mimetype="image/png")
+# @app.route("/show-fsm", methods=["GET"])
+# def show_fsm():
+#     machine.get_graph().draw("fsm.png", prog="dot", format="png")
+#     return send_file("fsm.png", mimetype="image/png")
 
 
 if __name__ == "__main__":
