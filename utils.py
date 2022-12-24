@@ -143,7 +143,7 @@ def show_start_search(reply_token, text):
 
 def show_enter_menu(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
-    line_bot_api.reply_message(reply_token, TextSendMessage(text="可從選單中選擇服務項目了"))
+    line_bot_api.reply_message(reply_token, TextSendMessage(text="請從選單中選擇您要的服務項目"))
     
 def show_main_menu(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
