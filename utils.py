@@ -184,8 +184,8 @@ def show_maintenance_method(reply_token):
 def show_FSM(reply_token):
     line_bot_api = LineBotApi(channel_access_token)
     line_bot_api.reply_message(reply_token,ImageSendMessage(
-        original_content_url="https://i.imgur.com/AlUAb6h.png",
-        preview_image_url="https://i.imgur.com/AlUAb6h.png"))
+        original_content_url="https://i.imgur.com/rR8CR8W.png",
+        preview_image_url="https://i.imgur.com/rR8CR8W.png"))
     
 def show_contact_us(reply_token):
     line_bot_api = LineBotApi(channel_access_token)

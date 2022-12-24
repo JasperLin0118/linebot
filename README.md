@@ -18,7 +18,7 @@
 #### 聯絡我們: 各種聯絡資訊
 ![contact_us](./imgs/contact_us.png)
 #### 商品詢價: 連接至提供的詢價單
-![request_quote](./imgs/request_quote.png)
+![request_quote](./imgs/request_quote.jpg)
 #### 辦公室風格參考: 線上參考辦公室的風格
 ![search_style_and_category](./imgs/search_style_and_category.png)
 #### 可查詢風格，有10種可供選擇，可輸入編號或風格名稱，輸入錯誤可以重新輸入:
