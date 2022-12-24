@@ -6,6 +6,7 @@
 ![linebot_icon](./imgs/linebot_icon.jpg)
 ### 以下是機器人的line ID，也可以透過掃描QR code加入好友:
 ![linebot_ID](./imgs/linebot_ID.png)
+### 我們有做**資料庫**儲存每個使用者的使用紀錄，所以可以多人同時使用而不需要擔心是否有衝突。
 ### 功能選單:
 ![menu](https://i.imgur.com/bsR9HPw.png)
 
