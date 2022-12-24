@@ -144,9 +144,7 @@ def webhook_handler():
         print(f"\nFSM STATE: {machine.state}")
         # print(f"REQUEST BODY: \n{body}")
         response = machine.advance(event)
-        
-        if(state.to_dict()['state'] != machine.state):
-            document_ref.update({'state': machine.state})
+        document_ref.update({'state': machine.state})
         
     return "OK"
 
