@@ -37,35 +37,6 @@ transitions = [{"trigger": "advance", "source": "main_menu", "dest": "search_sty
             "dest": "search",
             "conditions": "is_going_to_search"
         }]
-
-
-# machine = TocMachine(
-#     states=["main_menu", "contents_and_images", "contact_us", "search_style_or_category", "search", "start_search", "category"],
-#     transitions=[
-#         {"trigger": "advance", "source": "main_menu", "dest": "search_style_or_category", "conditions": "is_going_to_search_style_or_category",},
-#         {"trigger": "advance", "source": "main_menu", "dest": "contents_and_images", "conditions": "is_going_to_contents_and_images",},
-#         {"trigger": "advance", "source": "main_menu", "dest": "contact_us", "conditions": "is_going_to_contact_us",},
-#         {"trigger": "advance", "source": "search_style_or_category", "dest": "search", "conditions": "is_going_to_search",},
-#         {"trigger": "advance", "source": "search_style_or_category", "dest": "category", "conditions": "is_going_to_category",},
-#         {"trigger": "advance", "source": "search", "dest": "start_search"},
-#         {"trigger": "advance", "source": "start_search", "dest": "search", "conditions": "is_going_to_backto_search"},
-#         {
-#             "trigger": "advance", 
-#             "source": ["main_menu", "category", "start_search", "search", "contents_and_images", "contact_us"], 
-#             "dest": "main_menu",
-#             "conditions": "is_going_to_main_menu"
-#         },
-#         {
-#             "trigger": "advance", 
-#             "source": ["start_search", "main_menu", "contents_and_images", "contact_us"], 
-#             "dest": "search",
-#             "conditions": "is_going_to_search"
-#         },
-#     ],
-#     initial="main_menu",
-#     auto_transitions=False,
-#     show_conditions=True,
-# )
 # machine.get_graph().draw("fsm.png", prog="dot", format="png")
 
 app = Flask(__name__, static_url_path="")
